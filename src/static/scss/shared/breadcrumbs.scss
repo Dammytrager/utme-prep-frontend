@@ -1,0 +1,50 @@
+body  {
+  font-family: $font !important;
+  height: 100vh;
+  width: 100%;
+}
+
+.dropdown {
+  .option-button  {
+    border-radius: 50% !important;
+    width: 32px;
+    height: 32px;
+    &:focus  {
+      background-color: $bg-light-hover;
+    }
+  }
+  .dropdown-menu  {
+    min-width: 7rem !important;
+  }
+}
+
+.text-green {
+  color: $mid-green;
+}
+
+.text-white {
+  color: $white;
+}
+
+.text-blue {
+  color: $blue;
+}
+
+.text-red  {
+  color: $danger;
+}
+
+.bg-blue  {
+  background-color: $blue;
+}
+
+.draft  {
+  font-size: 70%;
+  color: $text-light;
+}
+
+.sign-link  {
+  &:hover {
+    color: $mid-green;
+  }
+}

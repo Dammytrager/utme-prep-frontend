@@ -1,0 +1,30 @@
+<pl-navbar></pl-navbar>
+<div class="pl-topics container">
+  <ngx-loading-bar color="yellow" includeSpinner="false" height="3px" diameter="0px"></ngx-loading-bar>
+  <!-- categories header -->
+  <pl-header [data]="headerData"></pl-header>
+
+  <!--Topic List -->
+  <ul class="topics list-group">
+    <li class="topic bg-light p-3 list-group-item d-flex justify-content-between"
+        *ngFor="let lesson of lessons" (click)="_conversations(lesson)">
+      <div class="topic-title">
+        <div class="mb-2">{{lesson.title}}</div>
+        <div class="draft" *ngIf="lesson.draft"><fa-icon [icon]="faPenSquare"></fa-icon> &nbsp; Draft</div>
+      </div>
+      <!-- dropdown menu-->
+      <div class="dropdown" (click)="lesson.show = !lesson.show; $event.stopPropagation()">
+        <button class="btn btn-light option-button"
+                type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+          <fa-icon [icon]="faEllipsisV"></fa-icon>
+        </button>
+        <div class="dropdown-menu" [class.show]="lesson.show" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" (click)="editLesson(lesson)">Edit</a>
+          <a class="dropdown-item" (click)="deleteLesson(lesson)">Delete</a>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,35 @@
+<div class="pl-header d-md-flex justify-content-md-between bg-light py-4 px-2 px-md-4">
+  <div class="title text-blue text-center mb-2">{{data.title}}</div>
+  <div class="text-center d-flex align-items-center justify-content-center" *ngIf="data.title !== 'Conversations'; else conversationOptions">
+    <button class="btn btn-blue mr-2 d-block" *ngIf="data.title !== 'Category'" (click)="save()">{{saveButton}}</button>
+    <button
+            class="btn btn-light add-button text-center d-block" (click)="editDetails()">{{data.button}} &nbsp;
+      <fa-icon [icon]="faPlus"></fa-icon>
+    </button>
+  </div>
+  <ng-template #conversationOptions>
+    <ul class="nav navbar-expand-md">
+      <li class="nav-item">
+        <a class="nav-link active" (click)="addConversation('Message')">
+          Message
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" (click)="addConversation('Image')">
+          Image
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" (click)="addConversation('Video')">
+          Video
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" (click)="addConversation('Question')">
+          Question
+        </a>
+      </li>
+    </ul>
+
+  </ng-template>
+</div>

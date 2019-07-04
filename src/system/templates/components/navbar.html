@@ -1,0 +1,16 @@
+<nav class="pl-navbar navbar navbar-expand-sm navbar-light py-2">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/">PREPPER LEARNING</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#hidden"
+            aria-controls="hidden" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    <div class="collapse navbar-collapse" id="hidden">
+      <div class="form-inline my-2 ml-auto my-lg-0">
+        <button class="btn btn-red" (click)="logout()">Log out &nbsp;
+          <fa-icon [icon]="faSignOutAlt"></fa-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>

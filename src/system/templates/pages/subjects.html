@@ -1,0 +1,33 @@
+<pl-navbar></pl-navbar>
+<div class="pl-categories container">
+  <ngx-loading-bar color="yellow" includeSpinner="false" height="3px" diameter="0px"></ngx-loading-bar>
+  <!-- categories header -->
+  <pl-header [data]="headerData"></pl-header>
+
+  <!--categories list-->
+  <div class="row mt-md-5 mt-3">
+    <div class="col-md-6 col-lg-4 mb-3" *ngFor="let subject of subjects">
+      <div class="subject category bg-light p-3" (click)="topics(subject)">
+        <div class="d-flex justify-content-between">
+          <div class="category-title">
+            <div class="mb-2">{{subject.title}}</div>
+            <div class="draft" *ngIf="subject.draft"><fa-icon [icon]="faPenSquare"></fa-icon> &nbsp; Draft</div>
+          </div>
+          <!-- dropdown menu-->
+          <div class="dropdown" (click)="subject.show = !subject.show; $event.stopPropagation()">
+            <button class="btn btn-light option-button"
+                    type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+              <fa-icon [icon]="faEllipsisV"></fa-icon>
+            </button>
+            <div class="dropdown-menu" [class.show]="subject.show" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" (click)="editSubject(subject)">Edit</a>
+              <a class="dropdown-item" (click)="deleteSubject(subject)">Delete</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+.pl-topics  {
+  padding-top: 40px;
+  .topics {
+    padding-top: 60px;
+    .topic  {
+      cursor: pointer;
+      &:hover {
+        background-color: #f0f2f5 !important;
+      }
+    }
+  }
+}

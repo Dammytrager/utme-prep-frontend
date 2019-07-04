@@ -1,0 +1,32 @@
+<pl-navbar></pl-navbar>
+<div class="pl-categories container">
+  <ngx-loading-bar color="yellow" includeSpinner="false" height="3px" diameter="0px"></ngx-loading-bar>
+  <!-- categories header -->
+  <pl-header [data]="headerData"></pl-header>
+
+  <!--categories list-->
+  <div class="row mt-md-5 mt-3">
+    <div class="col-md-6 col-lg-4 mb-3" *ngFor="let category of categories">
+      <div class="category bg-light p-3" (click)="subjects(category)">
+        <div class="d-flex justify-content-between">
+          <div class="category-title">
+             {{category.title}}
+          </div>
+          <!-- dropdown menu-->
+          <div class="dropdown" (click)="category.show = !category.show; $event.stopPropagation()">
+            <button class="btn btn-light option-button"
+                    type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+              <fa-icon [icon]="faEliipsisV"></fa-icon>
+            </button>
+            <div class="dropdown-menu" [class.show] = "category.show" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" (click)="editCategory(category)">Edit</a>
+              <a class="dropdown-item" (click)="deleteCategory(category)">Delete</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

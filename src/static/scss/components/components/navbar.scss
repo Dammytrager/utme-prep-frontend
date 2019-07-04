@@ -1,0 +1,11 @@
+.pl-navbar {
+  background-color: $blue !important;
+  a {
+    color: $white !important;
+    font-size: 23px;
+    font-weight: bold;
+    &:hover, &:focus {
+      color: $white !important;
+    }
+  }
+}

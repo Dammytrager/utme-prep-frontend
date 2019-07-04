@@ -1,0 +1,52 @@
+<div class="pl-login">
+<!--  <pl-header></pl-header>-->
+  <div class="page d-flex align-items-center justify-content-center">
+    <div>
+      <div class="text-center text-white mb-5 title">
+        Prepper Learning
+      </div>
+      <div class="form-container">
+        <div class="header mb-3">
+          <h4 class="text-blue font-weight-bold text-center">Admin Login</h4>
+        </div>
+        <form [formGroup]="signinForm">
+          <!--email-->
+          <div class="form-group">
+            <label for="email" [ngClass]="classes(email)">Email Address</label>
+            <input type="email" id="email"
+                   formControlName="email" class="form-control">
+            <!--errors-->
+            <div *ngIf="email.errors && email.touched">
+              <small *ngIf="email.errors.required" class="text-red">
+                This field is required
+              </small>
+              <small *ngIf="!email.errors.required && email.errors.patternFail" class="text-red">
+                Invalid Email
+              </small>
+            </div>
+          </div>
+
+          <!--password-->
+          <div class="form-group">
+            <label for="password" [ngClass]="classes(password)">Password</label>
+            <input type="password" id="password"
+                   formControlName="password" class="form-control">
+            <!--errors-->
+            <div *ngIf="password.errors && password.touched">
+              <small *ngIf="password.errors.required" class="text-red">
+                This field is required
+              </small>
+            </div>
+          </div>
+          <!--submit button-->
+          <button class="btn btn-block btn-blue" [disabled]="signinForm.invalid || showLoader" [class.disabled]="signinForm.invalid || showLoader" (click)="signin()">
+            Sign in
+            <div class="float-right" *ngIf="showLoader">
+              <pl-loader [data]="loaderData"></pl-loader>
+            </div>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

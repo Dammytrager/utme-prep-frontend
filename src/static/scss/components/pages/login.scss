@@ -1,0 +1,27 @@
+.pl-login {
+  height: 100vh;
+  background-color: $blue;
+  .page {
+    min-height: 90vh;
+    .title  {
+      font-size: 28px;
+      text-transform: uppercase;
+    }
+    .form-container {
+      width: 400px;
+      padding: 30px 20px;
+      //border: solid 1px black;
+      background-color: $white;
+      border-radius: 8px;
+      box-shadow: 0 0 40px rgba(52,58,64,.15);
+      @media (max-width: 420px) {
+        width: 320px;
+      }
+      .header {
+        h4 {
+          padding: 7px;
+        }
+      }
+    }
+  }
+}

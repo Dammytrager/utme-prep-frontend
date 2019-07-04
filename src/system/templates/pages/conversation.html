@@ -1,0 +1,75 @@
+<pl-navbar></pl-navbar>
+<div class="pl-conversations container">
+  <ngx-loading-bar color="yellow" includeSpinner="false" height="3px" diameter="0px"></ngx-loading-bar>
+  <!-- categories header -->
+  <pl-header [data]="headerData"></pl-header>
+
+  <!--Conversation List -->
+  <ul class="conversations list-group">
+    <li class="conversation bg-light list-group-item"
+        *ngFor="let conversation of conversations">
+      <div class="p-3 d-flex justify-content-between">
+        <div *ngIf="conversation?.type === 'Message'" class="title">
+          <div class="type mb-3 text-blue font-weight-bold">
+            {{conversation.type}}
+          </div>
+          {{conversation?.message}}
+        </div>
+        <div *ngIf="conversation.type === 'Image'" class="">
+          <div class="type mb-3 text-blue font-weight-bold">
+            {{conversation.type}}
+          </div>
+          <div class="caption mb-2">
+            {{conversation.image.caption}}
+          </div>
+          <div class="image">
+            <img class="img-fluid" src="{{conversation.image.url}}">
+          </div>
+        </div>
+        <div *ngIf="conversation?.type === 'Question'" class="title">
+          <div class="type mb-3 text-blue font-weight-bold">
+            {{conversation.type}}
+          </div>
+          <div class="question mb-1">
+            {{conversation?.question?.ques}}
+          </div>
+          <div class="options">
+            <div><b class="">Option 1</b> - {{conversation?.question?.op1}}</div>
+            <div><b class="">Option 2</b> - {{conversation?.question?.op2}}</div>
+            <div><b class="">Option 3</b> - {{conversation?.question?.op3}}</div>
+            <div><b class="">Option 4</b> - {{conversation?.question?.op4}}</div>
+            <div><b class="text-red">Failure</b> - {{conversation?.question?.failure}}</div>
+            <div><b class="text-success">Success</b> - {{conversation?.question?.success}}</div>
+          </div>
+        </div>
+        <div *ngIf="conversation.type === 'Video'" class="">
+          <div class="type mb-3 text-blue font-weight-bold">
+            {{conversation.type}}
+          </div>
+          <div class="caption mb-2">
+            {{conversation.video.caption}}
+          </div>
+          <div class="video">
+            <video class="img-fluid" controls>
+              <source src="{{conversation.video.url}}" type="video/mp4">
+            </video>
+          </div>
+        </div>
+        <!-- dropdown menu-->
+        <div class="dropdown" (click)="conversation.show = !conversation.show; $event.stopPropagation()">
+          <button class="btn btn-light option-button"
+                  type="button" id="dropdownMenuButton"
+                  data-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false">
+            <fa-icon [icon]="faEllipsisV"></fa-icon>
+          </button>
+          <div class="dropdown-menu" [class.show]="conversation.show" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" (click)="editConversation(conversation)">Edit</a>
+            <a class="dropdown-item" (click)="deleteConversation(conversation)">Delete</a>
+          </div>
+        </div>
+      </div>
+
+    </li>
+  </ul>
+</div>

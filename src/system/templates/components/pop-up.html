@@ -1,0 +1,224 @@
+<div class="pl-pop-up">
+  <div class="modal-header">
+    {{popupContent.title}}
+    <a class="close" (click)="closeModal()">&times;</a>
+  </div>
+  <div class="modal-body">
+    <!-- Adding || Editing -->
+    <form [formGroup]="queryForm" *ngIf="popupContent.title.split(' ')[0] !== 'Delete'; else deleteBlock">
+      <!-- Query Form Field -->
+      <div class="form-group"
+           *ngIf="
+           !(popupContent.title.split(' ')[1] === 'Question') &&
+           !(popupContent.title.split(' ')[1] === 'Image') &&
+           !(popupContent.title.split(' ')[1] === 'Video')">
+        <input type="text" formControlName="query" class="form-control" [placeholder]="popupContent.placeholder">
+        <!--errors-->
+        <div *ngIf="query.errors && query.touched">
+          <small *ngIf="query.errors.required" class="text-red">
+            This field is required
+          </small>
+        </div>
+      </div>
+
+      <!-- Option form field. used in changing categories for subjects -->
+      <div class="form-group" *ngIf="popupContent.title === 'Edit Subject'">
+        <select type="text" formControlName="options" class="form-control">
+          <option value="" selected>Change Category</option>
+          <option *ngFor="let c of categories" value="{{c?._id}}">{{c?.title}}</option>
+        </select>
+        <!--errors-->
+        <div *ngIf="options?.errors && options?.touched">
+          <small *ngIf="options?.errors.required" class="text-red">
+            This field is required
+          </small>
+        </div>
+      </div>
+
+      <!-- image || Video Form Field -->
+      <div formGroupName="upload" *ngIf="
+      popupContent.title.split(' ')[1] === 'Image' ||
+      popupContent.title.split(' ')[1] === 'Video'">
+        <div class="form-group">
+          <input type="file" (change)="file = $event.target.files[0]"
+                 formControlName="content" class="form-control">
+          <!--errors-->
+          <div *ngIf="content.errors && content.touched">
+            <small *ngIf="content.errors.required" class="text-red">
+              This field is required
+            </small>
+          </div>
+        </div>
+        <div class="form-group">
+          <input type="text" formControlName="caption" class="form-control" [placeholder]="'caption'">
+          <!--errors-->
+          <div *ngIf="caption.errors && caption.touched">
+            <small *ngIf="caption.errors.required" class="text-red">
+              This field is required
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form fields for questions -->
+      <div class="row" formGroupName="question" *ngIf="popupContent.title.split(' ')[1] === 'Question'">
+        <!--question-->
+        <div class="col-md-12">
+          <label for="question">Question</label>
+          <div class="form-group">
+            <textarea class="form-control" id="question" placeholder="Question"
+            formControlName="ques"></textarea>
+            <!--errors-->
+            <div *ngIf="ques?.errors && ques?.touched">
+              <small *ngIf="ques?.errors.required" class="text-red">
+                This field is required
+              </small>
+            </div>
+          </div>
+        </div>
+        <!-- option 1-->
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="option1">
+              <div class="form-check">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input"
+                         value="a"
+                         formControlName="rightAnswer">Option 1
+                </label>
+              </div>
+            </label>
+            <input type="text" #option1 id="option1" formControlName="op1" class="form-control" [placeholder]="'Option 1'">
+            <!--errors-->
+            <div *ngIf="op1.errors && op1.touched">
+              <small *ngIf="op1.errors.required" class="text-red">
+                This field is required
+              </small>
+            </div>
+          </div>
+        </div>
+        <!-- option 2-->
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="option2">
+              <div class="form-check">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input"
+                         value="b"
+                         formControlName="rightAnswer">Option 2
+                </label>
+              </div>
+            </label>
+            <input type="text" #option2 id="option2" formControlName="op2" class="form-control"
+                   [placeholder]="'Option 2'">
+            <!--errors-->
+            <div *ngIf="op2.errors && op2.touched">
+              <small *ngIf="op2.errors.required" class="text-red">
+                This field is required
+              </small>
+            </div>
+          </div>
+        </div>
+        <!-- option 3-->
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="option3">
+              <div class="form-check">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input"
+                         value="c"
+                         formControlName="rightAnswer">Option 3
+                </label>
+              </div>
+            </label>
+            <input type="text" #option3 id="option3" formControlName="op3" class="form-control"
+                   [placeholder]="'Option 3'">
+            <!--errors-->
+            <div *ngIf="op3.errors && op3.touched">
+              <small *ngIf="op3.errors.required" class="text-red">
+                This field is required
+              </small>
+            </div>
+          </div>
+        </div>
+        <!-- option 4-->
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="option4">
+              <div class="form-check">
+                <label class="form-check-label">
+                  <input type="radio" class="form-check-input"
+                         value="d"
+                         formControlName="rightAnswer">Option 4
+                </label>
+              </div>
+            </label>
+            <input type="text" #option4 id="option4" formControlName="op4" class="form-control"
+                   [placeholder]="'Option 4'">
+            <!--errors-->
+            <div *ngIf="op4.errors && op4.touched">
+              <small *ngIf="op4.errors.required" class="text-red">
+                This field is required
+              </small>
+            </div>
+          </div>
+        </div>
+        <!-- success message-->
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="success">
+              Success Message
+            </label>
+            <input type="text" id="success" formControlName="success" class="form-control"
+                   [placeholder]="'Success Message'">
+            <!--errors-->
+            <div *ngIf="success.errors && success.touched">
+              <small *ngIf="success.errors.required" class="text-red">
+                This field is required
+              </small>
+            </div>
+          </div>
+        </div>
+        <!-- failure message-->
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="failure">
+              Success Message
+            </label>
+            <input type="text" id="failure" formControlName="failure" class="form-control"
+                   [placeholder]="'Failure Message'">
+            <!--errors-->
+            <div *ngIf="failure.errors && failure.touched">
+              <small *ngIf="failure.errors.required" class="text-red">
+                This field is required
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-blue btn-block" [disabled]="queryForm.invalid || showLoader"
+              [class.disabled]="queryForm.invalid || showLoader"
+              (click)="action()">
+        {{popupContent.button}}
+        <div class="float-right" *ngIf="showLoader">
+          <pl-loader [data]="loaderData"></pl-loader>
+        </div>
+      </button>
+    </form>
+
+    <!-- Deleting -->
+    <ng-template #deleteBlock>
+      <div class="delete-block">
+        <div class="text">
+          <h5 class="text-red font-weight-bold mb-3">Are you sure you want to delete this {{popupContent.title.split(' ')[1]}}?</h5>
+          <p class="">Deleting this {{popupContent.title.split(' ')[1]}} will remove it and all its sub components</p>
+        </div>
+        <div class="buttons mt-4 d-flex justify-content-end">
+          <button class="btn btn-red mx-2" type="button" (click)="action()">Yes</button>
+          <button class="btn btn-blue mx-2" type="button" (click)="closeModal()">No</button>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>
+

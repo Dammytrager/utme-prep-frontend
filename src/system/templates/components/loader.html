@@ -1,0 +1,29 @@
+<div class="spinner spinner-1" *ngIf="data.type == 1"
+     [class.blue]="data.color == 'blue'"
+     [class.green]="data.color == 'green'"
+     [class.white]="data.color == 'white'"
+     [class.one-x]="data.size === '1x'"
+     [class.two-x]="data.size === '2x'"
+     [class.three-x]="data.size === '3x'">
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
+
+<div *ngIf="data.type == 2" class="spinner spinner-2"
+     [class.blue]="data.color == 'blue'"
+     [class.green]="data.color == 'green'"
+     [class.white]="data.color == 'white'"
+     [class.one-x]="data.size === '1x'"
+     [class.two-x]="data.size === '2x'"
+     [class.three-x]="data.size === '3x'">
+</div>
+
+<div *ngIf="data.type == 3" class="spinner spinner-3"
+     [class.blue]="data.color == 'blue'"
+     [class.green]="data.color == 'green'"
+     [class.white]="data.color == 'white'"
+     [class.one-x]="data.size === '1x'"
+     [class.two-x]="data.size === '2x'"
+     [class.three-x]="data.size === '3x'">
+</div>
