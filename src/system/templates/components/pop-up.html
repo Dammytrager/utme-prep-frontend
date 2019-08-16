@@ -11,6 +11,7 @@
            *ngIf="
            !(popupContent.title.split(' ')[1] === 'Question') &&
            !(popupContent.title.split(' ')[1] === 'Image') &&
+           !(popupContent.title.split(' ')[1] === 'Message') &&
            !(popupContent.title.split(' ')[1] === 'Video')">
         <input type="text" formControlName="query" class="form-control" [placeholder]="popupContent.placeholder">
         <!--errors-->
@@ -39,163 +40,199 @@
       <div formGroupName="upload" *ngIf="
       popupContent.title.split(' ')[1] === 'Image' ||
       popupContent.title.split(' ')[1] === 'Video'">
-        <div class="form-group">
-          <input type="file" (change)="file = $event.target.files[0]"
-                 formControlName="content" class="form-control">
-          <!--errors-->
-          <div *ngIf="content.errors && content.touched">
-            <small *ngIf="content.errors.required" class="text-red">
-              This field is required
-            </small>
+          <div class="form-group">
+            <input type="file" (change)="file = $event.target.files[0]"
+                   formControlName="content" class="form-control">
+            <!--errors-->
+            <div *ngIf="content.errors && content.touched">
+              <small *ngIf="content.errors.required" class="text-red">
+                This field is required
+              </small>
+            </div>
           </div>
-        </div>
-        <div class="form-group">
-          <input type="text" formControlName="caption" class="form-control" [placeholder]="'caption'">
-          <!--errors-->
-          <div *ngIf="caption.errors && caption.touched">
-            <small *ngIf="caption.errors.required" class="text-red">
-              This field is required
-            </small>
+          <div class="form-group">
+            <input type="text" formControlName="caption" class="form-control" [placeholder]="'caption'">
+            <!--errors-->
+            <div *ngIf="caption.errors && caption.touched">
+              <small *ngIf="caption.errors.required" class="text-red">
+                This field is required
+              </small>
+            </div>
+          </div>
+      </div>
+
+      <!-- Messages -->
+      <div formGroupName="message" *ngIf="popupContent.title.split(' ')[1] === 'Message'">
+        <div *ngFor="let msg of message.controls; let i = index" class="border p-2 mb-2" [formGroupName]="i">
+          <div class="close btn-light p-1" style="cursor: pointer" (click)="removeControl('message', i)">
+            &times;
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" formControlName="content">
+            <!--errors-->
+            <div *ngIf="msg?.controls?.content?.errors && msg?.controls?.content?.touched">
+              <small *ngIf="msg?.controls?.content?.errors?.required" class="text-red">
+                This field is required
+              </small>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- Form fields for questions -->
-      <div class="row" formGroupName="question" *ngIf="popupContent.title.split(' ')[1] === 'Question'">
-        <!--question-->
-        <div class="col-md-12">
-          <label for="question">Question</label>
-          <div class="form-group">
+      <div formGroupName="question" *ngIf="popupContent.title.split(' ')[1] === 'Question'">
+        <div *ngFor="let quest of question.controls; let i = index" class="border p-2 mb-2">
+          <div class="close btn-light p-1" style="cursor: pointer" (click)="removeControl('question', i)">
+            &times;
+          </div>
+          <div [formGroupName]="i" class="row">
+            <!--question-->
+            <div class="col-md-12">
+              <label for="question">Question</label>
+              <div class="form-group">
             <textarea class="form-control" id="question" placeholder="Question"
-            formControlName="ques"></textarea>
-            <!--errors-->
-            <div *ngIf="ques?.errors && ques?.touched">
-              <small *ngIf="ques?.errors.required" class="text-red">
-                This field is required
-              </small>
-            </div>
-          </div>
-        </div>
-        <!-- option 1-->
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="option1">
-              <div class="form-check">
-                <label class="form-check-label">
-                  <input type="radio" class="form-check-input"
-                         value="a"
-                         formControlName="rightAnswer">Option 1
-                </label>
+                      formControlName="ques"></textarea>
+                <!--errors-->
+                <div *ngIf="quest?.controls?.ques?.errors && quest?.controls?.ques?.touched">
+                  <small *ngIf="quest?.controls?.ques?.errors.required" class="text-red">
+                    This field is required
+                  </small>
+                </div>
               </div>
-            </label>
-            <input type="text" #option1 id="option1" formControlName="op1" class="form-control" [placeholder]="'Option 1'">
-            <!--errors-->
-            <div *ngIf="op1.errors && op1.touched">
-              <small *ngIf="op1.errors.required" class="text-red">
-                This field is required
-              </small>
             </div>
-          </div>
-        </div>
-        <!-- option 2-->
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="option2">
-              <div class="form-check">
-                <label class="form-check-label">
-                  <input type="radio" class="form-check-input"
-                         value="b"
-                         formControlName="rightAnswer">Option 2
+            <!-- option 1-->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="option1">
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input type="radio" class="form-check-input"
+                             value="a"
+                             formControlName="rightAnswer">Option 1
+                    </label>
+                  </div>
                 </label>
+                <input type="text" #option1 id="option1" formControlName="op1" class="form-control" [placeholder]="'Option 1'">
+                <!--errors-->
+                <div *ngIf="quest?.controls?.op1.errors && quest?.controls?.op1.touched">
+                  <small *ngIf="quest?.controls?.op1.errors.required" class="text-red">
+                    This field is required
+                  </small>
+                </div>
               </div>
-            </label>
-            <input type="text" #option2 id="option2" formControlName="op2" class="form-control"
-                   [placeholder]="'Option 2'">
-            <!--errors-->
-            <div *ngIf="op2.errors && op2.touched">
-              <small *ngIf="op2.errors.required" class="text-red">
-                This field is required
-              </small>
             </div>
-          </div>
-        </div>
-        <!-- option 3-->
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="option3">
-              <div class="form-check">
-                <label class="form-check-label">
-                  <input type="radio" class="form-check-input"
-                         value="c"
-                         formControlName="rightAnswer">Option 3
+            <!-- option 2-->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="option2">
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input type="radio" class="form-check-input"
+                             value="b"
+                             formControlName="rightAnswer">Option 2
+                    </label>
+                  </div>
                 </label>
+                <input type="text" #option2 id="option2" formControlName="op2" class="form-control"
+                       [placeholder]="'Option 2'">
+                <!--errors-->
+                <div *ngIf="quest?.controls?.op2.errors && quest?.controls?.op2.touched">
+                  <small *ngIf="quest?.controls?.op2.errors.required" class="text-red">
+                    This field is required
+                  </small>
+                </div>
               </div>
-            </label>
-            <input type="text" #option3 id="option3" formControlName="op3" class="form-control"
-                   [placeholder]="'Option 3'">
-            <!--errors-->
-            <div *ngIf="op3.errors && op3.touched">
-              <small *ngIf="op3.errors.required" class="text-red">
-                This field is required
-              </small>
             </div>
-          </div>
-        </div>
-        <!-- option 4-->
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="option4">
-              <div class="form-check">
-                <label class="form-check-label">
-                  <input type="radio" class="form-check-input"
-                         value="d"
-                         formControlName="rightAnswer">Option 4
+            <!-- option 3-->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="option3">
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input type="radio" class="form-check-input"
+                             value="c"
+                             formControlName="rightAnswer">Option 3
+                    </label>
+                  </div>
                 </label>
+                <input type="text" #option3 id="option3" formControlName="op3" class="form-control"
+                       [placeholder]="'Option 3'">
+                <!--errors-->
+                <div *ngIf="quest?.controls?.op3.errors && quest?.controls?.op3.touched">
+                  <small *ngIf="quest?.controls?.op3.errors.required" class="text-red">
+                    This field is required
+                  </small>
+                </div>
               </div>
-            </label>
-            <input type="text" #option4 id="option4" formControlName="op4" class="form-control"
-                   [placeholder]="'Option 4'">
-            <!--errors-->
-            <div *ngIf="op4.errors && op4.touched">
-              <small *ngIf="op4.errors.required" class="text-red">
-                This field is required
-              </small>
+            </div>
+            <!-- option 4-->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="option4">
+                  <div class="form-check">
+                    <label class="form-check-label">
+                      <input type="radio" class="form-check-input"
+                             value="d"
+                             formControlName="rightAnswer">Option 4
+                    </label>
+                  </div>
+                </label>
+                <input type="text" #option4 id="option4" formControlName="op4" class="form-control"
+                       [placeholder]="'Option 4'">
+                <!--errors-->
+                <div *ngIf="quest?.controls?.op4.errors && quest?.controls?.op4.touched">
+                  <small *ngIf="quest?.controls?.op4.errors.required" class="text-red">
+                    This field is required
+                  </small>
+                </div>
+              </div>
+            </div>
+            <!-- success message-->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="success">
+                  Success Message
+                </label>
+                <input type="text" id="success" formControlName="success" class="form-control"
+                       [placeholder]="'Success Message'">
+                <!--errors-->
+                <div *ngIf="quest?.controls?.success.errors && quest?.controls?.success.touched">
+                  <small *ngIf="quest?.controls?.success.errors.required" class="text-red">
+                    This field is required
+                  </small>
+                </div>
+              </div>
+            </div>
+            <!-- failure message-->
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="failure">
+                  Success Message
+                </label>
+                <input type="text" id="failure" formControlName="failure" class="form-control"
+                       [placeholder]="'Failure Message'">
+                <!--errors-->
+                <div *ngIf="quest?.controls?.failure.errors && quest?.controls?.failure.touched">
+                  <small *ngIf="quest?.controls?.failure.errors.required" class="text-red">
+                    This field is required
+                  </small>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <!-- success message-->
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="success">
-              Success Message
-            </label>
-            <input type="text" id="success" formControlName="success" class="form-control"
-                   [placeholder]="'Success Message'">
-            <!--errors-->
-            <div *ngIf="success.errors && success.touched">
-              <small *ngIf="success.errors.required" class="text-red">
-                This field is required
-              </small>
-            </div>
           </div>
-        </div>
-        <!-- failure message-->
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="failure">
-              Success Message
-            </label>
-            <input type="text" id="failure" formControlName="failure" class="form-control"
-                   [placeholder]="'Failure Message'">
-            <!--errors-->
-            <div *ngIf="failure.errors && failure.touched">
-              <small *ngIf="failure.errors.required" class="text-red">
-                This field is required
-              </small>
-            </div>
-          </div>
-        </div>
       </div>
+
+      <!--Add more formcontrol -->
+      <div class="my-3 d-flex justify-content-end" *ngIf="
+      !(popupContent.title.split(' ')[1] === 'Image') &&
+      !(popupContent.title.split(' ')[1] === 'Video')">
+        <button class="btn btn-light" (click)="addControl(type)">
+          Add more &nbsp;
+          <fa-icon [icon]="faPlus"></fa-icon>
+        </button>
+      </div>
+
       <button class="btn btn-blue btn-block" [disabled]="queryForm.invalid || showLoader"
               [class.disabled]="queryForm.invalid || showLoader"
               (click)="action()">

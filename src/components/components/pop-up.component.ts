@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {select} from '@angular-redux/store';
 import {Observable, Subscription} from 'rxjs';
@@ -15,6 +15,8 @@ import {LessonService} from '../../system/services/lesson.service';
 import {ConversationService} from '../../system/services/conversation.service';
 import {FileUploader} from 'ng2-file-upload';
 import {ForageService} from '../../system/services/storage.service';
+import {faPlus} from "@fortawesome/free-solid-svg-icons";
+import {forEach} from "@angular/router/src/utils/collection";
 
 @Component({
   selector: 'pl-pop-up',
@@ -25,9 +27,11 @@ export class PopUpComponent implements OnInit, OnDestroy {
   $popupContent$: Subscription;
   popupContent: IPopup;
   categories;
+  faPlus = faPlus;
   optionsControl: FormControl;
   file;
   id;
+  type;
   queryForm: FormGroup;
   showLoader = false;
   loaderData: Loader = {
@@ -48,11 +52,6 @@ export class PopUpComponent implements OnInit, OnDestroy {
 
 
     this.id = this.router.url.split('/')[3];
-    // const url = `${HOSTAPI}/add-chat_image/${this.id}`;
-    // this.uploader = new FileUploader({
-    //   url,
-    //   itemAlias: 'file'});
-    // this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
     this.queryForm = this.fb.group({
       query: ['', Validators.required]
     });
@@ -67,6 +66,7 @@ export class PopUpComponent implements OnInit, OnDestroy {
           this.popupContent.content.message ||
           this.popupContent.content._id) :
         this.query.setValue(this.popupContent.content);
+      this.type = this.popupContent.title.split(' ')[1].toLowerCase();
       if (this.popupContent.title === 'Edit Subject') {
         this.queryForm.addControl('options', this.optionsControl);
         const url = `${HOSTAPI}/categories`;
@@ -89,7 +89,9 @@ export class PopUpComponent implements OnInit, OnDestroy {
           failure: ['', Validators.required],
           success: ['', Validators.required]
         });
-        this.queryForm.addControl('question', question);
+        const questionArray = this.fb.array([]);
+        this.queryForm.addControl('question', questionArray);
+        this.question.push(question);
         if (this.popupContent.title.split(' ')[0] === 'Edit') {
           this.question.setValue({...this.popupContent.content.question, ...{rightAnswer: ''}});
         }
@@ -111,6 +113,15 @@ export class PopUpComponent implements OnInit, OnDestroy {
           this.content.clearValidators();
         }
       }
+      if (this.popupContent.title.split(' ')[1] === 'Message') {
+        this.query.setValue('hi'); // to make query field valid
+        const message = this.fb.group({
+          content: ['', Validators.required]
+        });
+        const messageArray = this.fb.array([]);
+        this.queryForm.addControl('message', messageArray);
+        this.message.push(message);
+      }
     });
   }
 
@@ -121,7 +132,7 @@ export class PopUpComponent implements OnInit, OnDestroy {
     return this.queryForm.get('options');
   }
   get question() {
-    return this.queryForm.get('question');
+    return this.queryForm.get('question') as FormArray;
   }
   get ques() {
     return this.queryForm.get('question').get('ques');
@@ -156,13 +167,46 @@ export class PopUpComponent implements OnInit, OnDestroy {
   get caption() {
     return this.queryForm.get('upload').get('caption');
   }
-
+  get message() {
+    return this.queryForm.get('message') as FormArray;
+  }
   closeModal() {
     this.activeModal.close();
   }
 
   ngOnDestroy() {
     this.$popupContent$.unsubscribe();
+  }
+
+  initControl(type, key?, value?) {
+    // initialize our controls
+    if (type === 'question') {
+      return this.fb.group({
+        ques: ['', Validators.required],
+        op1: ['', Validators.required],
+        op2: ['', Validators.required],
+        op3: ['', Validators.required],
+        op4: ['', Validators.required],
+        rightAnswer: ['', Validators.required],
+        failure: ['', Validators.required],
+        success: ['', Validators.required]
+      });
+    }
+    else if (type === 'message') {
+      return this.fb.group({
+        content: ['', Validators.required]
+      });
+    }
+  }
+
+  addControl(type) {
+    type = type === 'video' || type === 'image' ?
+      'upload' : type;
+    this[type].push(this.initControl(type));
+  }
+
+  removeControl(type, index) {
+    this[type].removeAt(index);
   }
 
 
@@ -231,17 +275,21 @@ export class PopUpComponent implements OnInit, OnDestroy {
         });
         break;
       case 'Add Question':
-        const options = {
-          a: this.op1.value,
-          b: this.op2.value,
-          c: this.op3.value,
-          d: this.op4.value
-        };
-        const rightAnswer = options[this.rightAnswer.value];
-        const question = {...this.question.value, ...{rightAnswer}};
-        this.conversation.addQuestion(question, id).then(() => {
-          this.closeModal();
+        const formattedQuestion = [];
+        this.question.value.forEach(quest => {
+          const options = {
+              a: quest.op1,
+              b: quest.op2,
+              c: quest.op3,
+              d: quest.op4
+            };
+          const rightAnswer = options[quest.rightAnswer];
+          const question = {...quest, ...{rightAnswer}};
+          formattedQuestion.push(question);
         });
+        this.conversation.addQuestion(formattedQuestion, id).then(() => {
+            this.closeModal();
+          });
         break;
       case 'Edit Question':
         const UOptions = {
@@ -257,7 +305,7 @@ export class PopUpComponent implements OnInit, OnDestroy {
         });
         break;
       case 'Add Message':
-        this.conversation.addMessage({message: this.query.value}, id).then(() => {
+        this.conversation.addMessage(this.message.value, id).then(() => {
           this.closeModal();
         });
         break;
@@ -269,7 +317,6 @@ export class PopUpComponent implements OnInit, OnDestroy {
       case 'Add Image':
         this.storage.localGet('token').then((token: any) => {
           this.http.setHeaders({token});
-          console.log(this.http.Headers);
         });
         const content = new FormData();
         content.append('file', this.file);

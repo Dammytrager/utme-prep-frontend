@@ -42,7 +42,7 @@ export class AdminService {
         this.toast.success('login successful');
       })
       .catch(err => {
-        this.toast.error(err.error.message);
+        this.toast.error(err.error && err.error.message);
       });
   }
 
