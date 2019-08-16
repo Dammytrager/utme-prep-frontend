@@ -225,8 +225,8 @@
 
       <!--Add more formcontrol -->
       <div class="my-3 d-flex justify-content-end" *ngIf="
-      !(popupContent.title.split(' ')[1] === 'Image') &&
-      !(popupContent.title.split(' ')[1] === 'Video')">
+      (popupContent.title === 'Add Message') ||
+      (popupContent.title === 'Add Question')">
         <button class="btn btn-light" (click)="addControl(type)">
           Add more &nbsp;
           <fa-icon [icon]="faPlus"></fa-icon>

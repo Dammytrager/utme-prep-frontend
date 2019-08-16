@@ -60,7 +60,7 @@ export class ConversationComponent implements OnInit, OnDestroy {
       content: conversation
     };
     this.ngRedux.dispatch({type: CHANGE_POPUP_CONTENT, popupContent});
-    this.modal.openModal(PopUpComponent, {size: 'md', centered: true});
+    this.modal.openModal(PopUpComponent, {size: 'lg', centered: true});
   }
 
   deleteConversation(conversation) {

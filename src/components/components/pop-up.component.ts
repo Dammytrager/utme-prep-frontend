@@ -93,7 +93,7 @@ export class PopUpComponent implements OnInit, OnDestroy {
         this.queryForm.addControl('question', questionArray);
         this.question.push(question);
         if (this.popupContent.title.split(' ')[0] === 'Edit') {
-          this.question.setValue({...this.popupContent.content.question, ...{rightAnswer: ''}});
+          this.question.controls[0].setValue({...this.popupContent.content.question, ...{rightAnswer: ''}});
         }
       }
       if (this.popupContent.title.split(' ')[1] === 'Image' ||
@@ -121,6 +121,11 @@ export class PopUpComponent implements OnInit, OnDestroy {
         const messageArray = this.fb.array([]);
         this.queryForm.addControl('message', messageArray);
         this.message.push(message);
+        if (this.popupContent.title.split(' ')[0] === 'Edit') {
+          this.message.controls[0].setValue({
+            content: this.popupContent.content.message
+          });
+        }
       }
     });
   }
@@ -292,14 +297,15 @@ export class PopUpComponent implements OnInit, OnDestroy {
           });
         break;
       case 'Edit Question':
+        const quest = this.question.value[0];
         const UOptions = {
-          a: this.op1.value,
-          b: this.op2.value,
-          c: this.op3.value,
-          d: this.op4.value
+          a: quest.op1,
+          b: quest.op2,
+          c: quest.op3,
+          d: quest.op4
         }; // UOptions means Updated Options
-        const URightAnswer = UOptions[this.rightAnswer.value];
-        const UQuestion = {...this.question.value, ...{UrightAnswer: URightAnswer}};
+        const UrightAnswer = UOptions[quest.rightAnswer];
+        const UQuestion = {...quest, ...{UrightAnswer}};
         this.conversation.editQuestion(UQuestion, this.popupContent.content._id).then(() => {
           this.closeModal();
         });
@@ -310,7 +316,8 @@ export class PopUpComponent implements OnInit, OnDestroy {
         });
         break;
       case 'Edit Message':
-        this.conversation.editMessage({message: this.query.value}, this.popupContent.content._id).then(() => {
+        const msg = this.message.value[0].content;
+        this.conversation.editMessage({message: msg}, this.popupContent.content._id).then(() => {
           this.closeModal();
         });
         break;
