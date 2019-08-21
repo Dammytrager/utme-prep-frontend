@@ -11,7 +11,7 @@
            *ngIf="
            !(popupContent.title.split(' ')[1] === 'Question') &&
            !(popupContent.title.split(' ')[1] === 'Image') &&
-           !(popupContent.title.split(' ')[1] === 'Message') &&
+           !(popupContent.title === 'Add Message') &&
            !(popupContent.title.split(' ')[1] === 'Video')">
         <input type="text" formControlName="query" class="form-control" [placeholder]="popupContent.placeholder">
         <!--errors-->
@@ -62,19 +62,14 @@
       </div>
 
       <!-- Messages -->
-      <div formGroupName="message" *ngIf="popupContent.title.split(' ')[1] === 'Message'">
-        <div *ngFor="let msg of message.controls; let i = index" class="border p-2 mb-2" [formGroupName]="i">
-          <div class="close btn-light p-1" style="cursor: pointer" (click)="removeControl('message', i)">
-            &times;
-          </div>
-          <div class="form-group">
-            <input type="text" class="form-control" formControlName="content">
-            <!--errors-->
-            <div *ngIf="msg?.controls?.content?.errors && msg?.controls?.content?.touched">
-              <small *ngIf="msg?.controls?.content?.errors?.required" class="text-red">
-                This field is required
-              </small>
-            </div>
+      <div formGroupName="message" *ngIf="popupContent.title === 'Add Message'">
+        <div class="form-group">
+        <textarea rows="10" type="text" class="form-control" formControlName="content"></textarea>
+          <!--errors-->
+          <div *ngIf="message?.content?.errors && message?.content?.touched">
+            <small *ngIf="message.content?.errors?.required" class="text-red">
+              This field is required
+            </small>
           </div>
         </div>
       </div>
@@ -224,9 +219,7 @@
       </div>
 
       <!--Add more formcontrol -->
-      <div class="my-3 d-flex justify-content-end" *ngIf="
-      (popupContent.title === 'Add Message') ||
-      (popupContent.title === 'Add Question')">
+      <div class="my-3 d-flex justify-content-end" *ngIf="(popupContent.title === 'Add Question')">
         <button class="btn btn-light" (click)="addControl(type)">
           Add more &nbsp;
           <fa-icon [icon]="faPlus"></fa-icon>

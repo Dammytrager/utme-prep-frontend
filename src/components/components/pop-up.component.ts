@@ -118,13 +118,10 @@ export class PopUpComponent implements OnInit, OnDestroy {
         const message = this.fb.group({
           content: ['', Validators.required]
         });
-        const messageArray = this.fb.array([]);
-        this.queryForm.addControl('message', messageArray);
-        this.message.push(message);
+        this.queryForm.addControl('message', message);
         if (this.popupContent.title.split(' ')[0] === 'Edit') {
-          this.message.controls[0].setValue({
-            content: this.popupContent.content.message
-          });
+          this.query.setValue(this.popupContent.content.message);
+          this.message.get('content').clearValidators();
         }
       }
     });
@@ -173,7 +170,7 @@ export class PopUpComponent implements OnInit, OnDestroy {
     return this.queryForm.get('upload').get('caption');
   }
   get message() {
-    return this.queryForm.get('message') as FormArray;
+    return this.queryForm.get('message');
   }
   closeModal() {
     this.activeModal.close();
@@ -195,11 +192,6 @@ export class PopUpComponent implements OnInit, OnDestroy {
         rightAnswer: ['', Validators.required],
         failure: ['', Validators.required],
         success: ['', Validators.required]
-      });
-    }
-    else if (type === 'message') {
-      return this.fb.group({
-        content: ['', Validators.required]
       });
     }
   }
@@ -311,12 +303,22 @@ export class PopUpComponent implements OnInit, OnDestroy {
         });
         break;
       case 'Add Message':
-        this.conversation.addMessage(this.message.value, id).then(() => {
+        const messageArr = [];
+        let messages = this.message.value.content.split('\n');
+        const regex = /^\s+$/;
+        messages = messages.filter(message => {
+          return !(!message || message.match(regex));
+        });
+        messages.forEach(message => {
+          const obj = {content: message};
+          messageArr.push(obj);
+        });
+        this.conversation.addMessage(messageArr, id).then(() => {
           this.closeModal();
         });
         break;
       case 'Edit Message':
-        const msg = this.message.value[0].content;
+        const msg = this.query.value;
         this.conversation.editMessage({message: msg}, this.popupContent.content._id).then(() => {
           this.closeModal();
         });
