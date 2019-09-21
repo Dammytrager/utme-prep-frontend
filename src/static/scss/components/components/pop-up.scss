@@ -4,4 +4,41 @@
       cursor: pointer;
     }
   }
+
+  .modal-body {
+    .ck {
+      &-toolbar {
+        background-color: $white;
+        &__separator {
+          width: 0;
+        }
+      }
+
+      &-editor {
+        &__main {
+          margin-bottom: 15px;
+          &:focus {
+            outline: none;
+            border-color: #c4c4c4;
+            box-shadow: none;
+          }
+        }
+      }
+
+      &-content {
+        height: 250px;
+        border-top: none;
+        &:focus {
+          border-top: none;
+          outline: none;
+          border-color: #c4c4c4;
+          box-shadow: none;
+        }
+
+        p {
+          font-size: 14px;
+        }
+      }
+    }
+  }
 }

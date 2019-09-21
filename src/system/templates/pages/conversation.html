@@ -10,10 +10,10 @@
         *ngFor="let conversation of conversations">
       <div class="p-3 d-flex justify-content-between">
         <div *ngIf="conversation?.type === 'Message'" class="title">
-          <div class="type mb-3 text-blue font-weight-bold">
-            {{conversation.type}}
-          </div>
-          {{conversation?.message}}
+          <!--<div class="type mb-3 text-blue font-weight-bold">-->
+            <!--{{conversation.type}}-->
+          <!--</div>-->
+          <div [innerHTML]="conversation?.message"></div>
         </div>
         <div *ngIf="conversation.type === 'Image'" class="">
           <div class="type mb-3 text-blue font-weight-bold">

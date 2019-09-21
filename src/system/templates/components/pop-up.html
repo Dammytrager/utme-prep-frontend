@@ -11,7 +11,7 @@
            *ngIf="
            !(popupContent.title.split(' ')[1] === 'Question') &&
            !(popupContent.title.split(' ')[1] === 'Image') &&
-           !(popupContent.title === 'Add Message') &&
+           !(popupContent.title.split(' ')[1] === 'Message') &&
            !(popupContent.title.split(' ')[1] === 'Video')">
         <input type="text" formControlName="query" class="form-control" [placeholder]="popupContent.placeholder">
         <!--errors-->
@@ -62,16 +62,17 @@
       </div>
 
       <!-- Messages -->
-      <div formGroupName="message" *ngIf="popupContent.title === 'Add Message'">
-        <div class="form-group">
-        <textarea rows="10" type="text" class="form-control" formControlName="content"></textarea>
-          <!--errors-->
-          <div *ngIf="message?.content?.errors && message?.content?.touched">
-            <small *ngIf="message.content?.errors?.required" class="text-red">
-              This field is required
-            </small>
-          </div>
-        </div>
+      <div formGroupName="message" *ngIf="popupContent.title.split(' ')[1] === 'Message'">
+        <!--<div class="form-group">-->
+        <!--<textarea rows="10" type="text" class="form-control" formControlName="content"></textarea>-->
+          <!--&lt;!&ndash;errors&ndash;&gt;-->
+          <!--<div *ngIf="message?.content?.errors && message?.content?.touched">-->
+            <!--<small *ngIf="message.content?.errors?.required" class="text-red">-->
+              <!--This field is required-->
+            <!--</small>-->
+          <!--</div>-->
+        <!--</div>-->
+          <ckeditor [editor]="editor" [data]="editorData" [config]="editorConfig" (change)="editorOnChange($event)"></ckeditor>
       </div>
 
       <!-- Form fields for questions -->

@@ -28,7 +28,8 @@ import { SubjectsComponent } from '../../components/pages/subjects.component';
 import { TopicComponent } from '../../components/pages/topic.component';
 import { LessonComponent } from '../../components/pages/lesson.component';
 import { ConversationComponent } from '../../components/pages/conversation.component';
-import {FileUploadModule} from "ng2-file-upload";
+import {FileUploadModule} from 'ng2-file-upload';
+import {CKEditorModule} from '@ckeditor/ckeditor5-angular';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import {FileUploadModule} from "ng2-file-upload";
     ToastrModule.forRoot(),
     LoadingBarHttpClientModule,
     FontAwesomeModule,
-    FileUploadModule
+    FileUploadModule,
+    CKEditorModule
   ],
   providers: [
     ToastrService,

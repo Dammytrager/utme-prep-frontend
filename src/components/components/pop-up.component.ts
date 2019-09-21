@@ -13,10 +13,10 @@ import {SubjectService} from '../../system/services/subject.service';
 import {TopicService} from '../../system/services/topic.service';
 import {LessonService} from '../../system/services/lesson.service';
 import {ConversationService} from '../../system/services/conversation.service';
-import {FileUploader} from 'ng2-file-upload';
 import {ForageService} from '../../system/services/storage.service';
-import {faPlus} from "@fortawesome/free-solid-svg-icons";
-import {forEach} from "@angular/router/src/utils/collection";
+import {faPlus} from '@fortawesome/free-solid-svg-icons';
+import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import {ChangeEvent} from "@ckeditor/ckeditor5-angular";
 
 @Component({
   selector: 'pl-pop-up',
@@ -24,6 +24,7 @@ import {forEach} from "@angular/router/src/utils/collection";
 })
 export class PopUpComponent implements OnInit, OnDestroy {
   @select('popupContent') popupContent$: Observable<any>;
+  ckeConfig: any;
   $popupContent$: Subscription;
   popupContent: IPopup;
   categories;
@@ -32,6 +33,26 @@ export class PopUpComponent implements OnInit, OnDestroy {
   file;
   id;
   type;
+  editor = ClassicEditor;
+  editorData = '';
+  editorConfig = {
+    toolbar: {
+      items: [
+          'bold',
+          'italic',
+          'NumberedList',
+          'BulletedList',
+          'Link',
+          'Blockquote',
+          'Table',
+          '|',
+          'undo',
+          'redo'
+      ],
+
+      viewportTopOffset: 30
+    }
+  };
   queryForm: FormGroup;
   showLoader = false;
   loaderData: Loader = {
@@ -59,6 +80,11 @@ export class PopUpComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    this.ckeConfig = {
+        allowedContent: false,
+        extraPlugins: 'divarea',
+        forcePasteAsPlainText: true
+    };
     this.$popupContent$ = this.popupContent$.subscribe(async (data) => {
       this.popupContent = data;
       this.popupContent.content._id ?
@@ -120,8 +146,8 @@ export class PopUpComponent implements OnInit, OnDestroy {
         });
         this.queryForm.addControl('message', message);
         if (this.popupContent.title.split(' ')[0] === 'Edit') {
-          this.query.setValue(this.popupContent.content.message);
-          this.message.get('content').clearValidators();
+          this.editorData = this.popupContent.content.message;
+          this.message.get('content').patchValue(this.editorData);
         }
       }
     });
@@ -204,6 +230,12 @@ export class PopUpComponent implements OnInit, OnDestroy {
 
   removeControl(type, index) {
     this[type].removeAt(index);
+  }
+
+  editorOnChange({ editor }: ChangeEvent) {
+    const messageContent = this.message.get('content');
+    this.editorData = editor.getData();
+    messageContent.patchValue(this.editorData);
   }
 
 
@@ -304,12 +336,13 @@ export class PopUpComponent implements OnInit, OnDestroy {
         break;
       case 'Add Message':
         const messageArr = [];
-        let messages = this.message.value.content.split('\n');
+        let messages = this.message.value.content.split('</p>');
         const regex = /^\s+$/;
         messages = messages.filter(message => {
           return !(!message || message.match(regex));
         });
         messages.forEach(message => {
+          message = message + '</p>';
           const obj = {content: message};
           messageArr.push(obj);
         });
@@ -318,7 +351,7 @@ export class PopUpComponent implements OnInit, OnDestroy {
         });
         break;
       case 'Edit Message':
-        const msg = this.query.value;
+        const msg = this.editorData;
         this.conversation.editMessage({message: msg}, this.popupContent.content._id).then(() => {
           this.closeModal();
         });
