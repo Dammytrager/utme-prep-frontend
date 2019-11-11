@@ -4,6 +4,9 @@
   <!-- categories header -->
   <pl-header [data]="headerData"></pl-header>
 
+  <!-- Links -->
+  <pl-route-link [page]="'subject'"></pl-route-link>
+
   <!--categories list-->
   <div class="row mt-md-5 mt-3">
     <div class="col-md-6 col-lg-4 mb-3" *ngFor="let subject of subjects">
@@ -21,10 +24,18 @@
                     aria-expanded="false">
               <fa-icon [icon]="faEllipsisV"></fa-icon>
             </button>
-            <div class="dropdown-menu" [class.show]="subject.show" aria-labelledby="dropdownMenuButton">
+            <div class="dropdown-menu dropdown-menu-right" [class.show]="subject.show" aria-labelledby="dropdownMenuButton">
               <a class="dropdown-item" (click)="editSubject(subject)">Edit</a>
               <a class="dropdown-item" (click)="deleteSubject(subject)">Delete</a>
             </div>
+          </div>
+        </div>
+        <div class="d-flex mt-3">
+          <div class="badge badge-success mr-1 font-weight-bold nm-size" *ngIf="subject.featured">
+            F
+          </div>
+          <div class="badge badge-warning ml-1 font-weight-bold nm-size" *ngIf="subject.recommended">
+            R
           </div>
         </div>
       </div>

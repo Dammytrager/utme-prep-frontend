@@ -3,7 +3,7 @@ import {NgRedux} from '@angular-redux/store';
 import {ForageService} from './storage.service';
 import {IAppState} from '../interfaces/appState.interface';
 import {
-  CHANGE_CONVERSATIONS,
+  CHANGE_CONVERSATIONS, CHANGE_PRESENT_CATEGORY, CHANGE_PRESENT_LESSON, CHANGE_PRESENT_SUBJECT, CHANGE_PRESENT_TOPIC,
   CHANGE_TOPICS, REMOVE_CONVERSATIONS,
   REMOVE_TOPICS, UPDATE_CONVERSATIONS,
   UPDATE_TOPICS
@@ -45,6 +45,10 @@ export class ConversationService {
       this.http.get(url).then((data: any) => {
         const conversations = data.conversations;
         this.ngRedux.dispatch({type: CHANGE_CONVERSATIONS, conversations});
+        this.ngRedux.dispatch({type: CHANGE_PRESENT_LESSON, activeLesson: data.lesson});
+        this.ngRedux.dispatch({type: CHANGE_PRESENT_TOPIC, activeTopic: data.lesson.topic});
+        this.ngRedux.dispatch({type: CHANGE_PRESENT_SUBJECT, activeSubject: data.lesson.topic.subject});
+        this.ngRedux.dispatch({type: CHANGE_PRESENT_CATEGORY, activeCategory: data.lesson.topic.subject.category});
       });
     });
   }

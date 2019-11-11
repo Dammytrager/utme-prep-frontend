@@ -1,10 +1,11 @@
 import {IAppState} from '../interfaces/appState.interface';
 import {
+  CHANGE_ACTIVE_CATEGORY,
   CHANGE_ADMIN_LOGGEDIN,
   CHANGE_CATEGORIES,
   CHANGE_CONVERSATIONS,
   CHANGE_LESSONS,
-  CHANGE_POPUP_CONTENT,
+  CHANGE_POPUP_CONTENT, CHANGE_PRESENT_CATEGORY, CHANGE_PRESENT_LESSON, CHANGE_PRESENT_SUBJECT, CHANGE_PRESENT_TOPIC,
   CHANGE_ROUTE,
   CHANGE_SUBJECTS,
   CHANGE_TOPICS,
@@ -32,6 +33,9 @@ export const INITIAL_STATE: IAppState = {
   },
   categories: [],
   activeCategory: {},
+  activeSubject: {},
+  activeTopic: {},
+  activeLesson: {},
   subjects: [],
   topics: [],
   lessons: [],
@@ -111,6 +115,22 @@ export function reducerApp(state, action) {
     case REMOVE_CONVERSATIONS:
       return Object.assign({}, state, {
         conversations: removeItem(state.conversations, action.conversation)
+      });
+    case CHANGE_PRESENT_CATEGORY:
+      return Object.assign({}, state, {
+        activeCategory: action.activeCategory
+      });
+    case CHANGE_PRESENT_SUBJECT:
+      return Object.assign({}, state, {
+        activeSubject: action.activeSubject
+      });
+    case CHANGE_PRESENT_TOPIC:
+      return Object.assign({}, state, {
+        activeTopic: action.activeTopic
+      });
+    case CHANGE_PRESENT_LESSON:
+      return Object.assign({}, state, {
+        activeLesson: action.activeLesson
       });
   }
   return state;

@@ -36,6 +36,18 @@
         </div>
       </div>
 
+      <!-- Recommended and featured settings for subjects -->
+      <div class="my-4" *ngIf="popupContent.title === 'Edit Subject' && !popupContent.content.draft">
+        <div class="form-check mb-2">
+          <input type="checkbox" formControlName="featured" class="form-check-input" id="featured">
+          <label class="form-check-label" for="featured">Featured</label>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" formControlName="recommended" class="form-check-input" id="recommended">
+          <label class="form-check-label" for="recommended">Recommended</label>
+        </div>
+      </div>
+
       <!-- image || Video Form Field -->
       <div formGroupName="upload" *ngIf="
       popupContent.title.split(' ')[1] === 'Image' ||

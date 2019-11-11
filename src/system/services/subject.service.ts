@@ -3,6 +3,7 @@ import {NgRedux} from '@angular-redux/store';
 import {ForageService} from './storage.service';
 import {IAppState} from '../interfaces/appState.interface';
 import {
+  CHANGE_PRESENT_CATEGORY,
   CHANGE_SUBJECTS,
   REMOVE_SUBJECTS,
   UPDATE_SUBJECTS
@@ -31,10 +32,11 @@ export class SubjectService {
     this.storage.localGet('token').then((token: any) => {
       this.http.setHeaders({token});
       const url = `${HOSTAPI}/categories/${id}/subjects`;
-      this.http.get(url).then((subjects: any) => {
-        this.ngRedux.dispatch({type: CHANGE_SUBJECTS, subjects});
+      this.http.get(url).then((data: any) => {
+        this.ngRedux.dispatch({type: CHANGE_SUBJECTS, subjects: data.subjects});
+        this.ngRedux.dispatch({type: CHANGE_PRESENT_CATEGORY, activeCategory: data.category[0]});
         if (cb) {
-          cb(subjects);
+          cb(data.subjects);
         }
       });
     });

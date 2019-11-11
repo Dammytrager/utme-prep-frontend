@@ -3,6 +3,7 @@ import {NgRedux} from '@angular-redux/store';
 import {ForageService} from './storage.service';
 import {IAppState} from '../interfaces/appState.interface';
 import {
+  CHANGE_PRESENT_CATEGORY, CHANGE_PRESENT_SUBJECT,
   CHANGE_TOPICS,
   REMOVE_TOPICS,
   UPDATE_TOPICS
@@ -34,6 +35,8 @@ export class TopicService {
       this.http.get(url).then((data: any) => {
         const topics = data.topics;
         this.ngRedux.dispatch({type: CHANGE_TOPICS, topics});
+        this.ngRedux.dispatch({type: CHANGE_PRESENT_CATEGORY, activeCategory: data.subject.category});
+        this.ngRedux.dispatch({type: CHANGE_PRESENT_SUBJECT, activeSubject: data.subject});
         if (cb) {
           cb(data.topics);
         }

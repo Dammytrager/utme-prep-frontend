@@ -6,6 +6,9 @@ export interface IAppState {
   popupContent: IPopup;
   categories: any[];
   activeCategory: any;
+  activeSubject: any;
+  activeTopic: any;
+  activeLesson: any;
   subjects: any[];
   topics: any[];
   lessons: any[];

@@ -1,0 +1,27 @@
+<div class="mt-5 route-link nm-size">
+    >>
+    <span class="cursor-pointer item" routerLink="/admin/categories">Home</span>
+    <span class="cursor-pointer"
+          [routerLink]="'/admin/categories/' + (activeCategory | async)?._id + '/subjects'">
+        <span class="text-black-50"> > </span>
+        <span class="item" [class.text-muted]="page === 'subject'">{{(activeCategory | async)?.title}}</span>
+    </span>
+    <span class="cursor-pointer"
+          *ngIf="showSubject"
+          [routerLink]="'/admin/subjects/' + (activeSubject | async)?._id + '/topics'">
+        <span class="text-black-50"> > </span>
+        <span class="item" [class.text-muted]="page === 'topic'">{{(activeSubject | async)?.title}}</span>
+    </span>
+    <span class="cursor-pointer"
+          *ngIf="showTopic"
+          [routerLink]="'/admin/topics/' + (activeTopic | async)?._id + '/lessons'">
+        <span class="text-black-50"> > </span>
+        <span class="item" [class.text-muted]="page === 'lesson'">{{(activeTopic | async)?.title}}</span>
+    </span>
+    <span class="cursor-pointer"
+          *ngIf="showLesson"
+          [routerLink]="">
+        <span class="text-black-50"> > </span>
+        <span class="item" [class.text-muted]="page === 'conversation'">{{(activeLesson | async)?.title}}</span>
+    </span>
+</div>

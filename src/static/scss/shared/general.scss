@@ -1,0 +1,19 @@
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.nm-size {
+  font-size: 14px;
+}
+
+.route-link {
+  color: $blue;
+  .item {
+    &:hover {
+      font-weight: bold;
+    }
+  }
+  .text-muted {
+    pointer-events: none;
+  }
+}

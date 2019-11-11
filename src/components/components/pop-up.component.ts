@@ -16,7 +16,7 @@ import {ConversationService} from '../../system/services/conversation.service';
 import {ForageService} from '../../system/services/storage.service';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import {ChangeEvent} from "@ckeditor/ckeditor5-angular";
+import {ChangeEvent} from '@ckeditor/ckeditor5-angular';
 
 @Component({
   selector: 'pl-pop-up',
@@ -93,15 +93,23 @@ export class PopUpComponent implements OnInit, OnDestroy {
           this.popupContent.content._id) :
         this.query.setValue(this.popupContent.content);
       this.type = this.popupContent.title.split(' ')[1].toLowerCase();
-      if (this.popupContent.title === 'Edit Subject') {
-        this.queryForm.addControl('options', this.optionsControl);
-        const url = `${HOSTAPI}/categories`;
-        this.http.get(url).then((categories: any) => {
-          this.categories = categories;
-          const id = this.router.url.split('/')[3];
-          this.options.setValue(id);
-        });
+      if (this.popupContent.title.split(' ')[1] === 'Subject') {
+        const featured = this.fb.control(false);
+        const recommended = this.fb.control(false);
+        this.queryForm.addControl('featured', featured);
+        this.queryForm.addControl('recommended', recommended);
 
+        if (this.popupContent.title === 'Edit Subject') {
+          this.queryForm.addControl('options', this.optionsControl);
+          this.featured.setValue(this.popupContent.content.featured);
+          this.recommended.setValue(this.popupContent.content.recommended);
+          const url = `${HOSTAPI}/categories`;
+          this.http.get(url).then((categories: any) => {
+            this.categories = categories;
+            const id = this.router.url.split('/')[3];
+            this.options.setValue(id);
+          });
+        }
       }
       if (this.popupContent.title.split(' ')[1] === 'Question') {
         this.query.setValue('hi'); // to make query field valid
@@ -198,6 +206,14 @@ export class PopUpComponent implements OnInit, OnDestroy {
   get message() {
     return this.queryForm.get('message');
   }
+  get featured() {
+    return this.queryForm.get('featured');
+  }
+  get recommended() {
+    return this.queryForm.get('recommended');
+  }
+
+
   closeModal() {
     this.activeModal.close();
   }
@@ -249,6 +265,7 @@ export class PopUpComponent implements OnInit, OnDestroy {
         });
         break;
       case 'Edit Category':
+
         this.category.editCategory({title: this.query.value}, this.popupContent.content._id).then(() => {
           this.closeModal();
         });
@@ -259,12 +276,23 @@ export class PopUpComponent implements OnInit, OnDestroy {
         });
         break;
       case 'Add Subject':
-        this.subject.addSubject({title: this.query.value}, id).then(() => {
+        const subjectData = {
+          title: this.query.value,
+          featured: this.featured.value,
+          recommended: this.recommended.value
+        };
+        this.subject.addSubject(subjectData, id).then(() => {
           this.closeModal();
         });
         break;
       case 'Edit Subject':
-        this.subject.editSubject({title: this.query.value, category: this.options.value}, this.popupContent.content._id).then(() => {
+        const editSubjectData = {
+          title: this.query.value,
+          featured: this.featured.value,
+          recommended: this.recommended.value,
+          category: this.options.value
+        };
+        this.subject.editSubject(editSubjectData, this.popupContent.content._id).then(() => {
           this.closeModal();
         });
         break;

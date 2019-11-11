@@ -20,21 +20,19 @@ export class CategoryService {
               private router: Router,
               private http: HttpService,
               private toast: ToastrService) {
-
-    this.storage.localGet('token').then((token: any) => {
-      this.http.setHeaders({token});
-    });
-
   }
 
   async getCategories(ret?) {
-    const url = `${HOSTAPI}/categories`;
-    this.http.get(url).then((categories: any) => {
-      // this.categories = categories;
-      if (ret) {
-        return categories;
-      }
-      this.ngRedux.dispatch({type: CHANGE_CATEGORIES, categories});
+    this.storage.localGet('token').then((token: any) => {
+      this.http.setHeaders({token});
+      const url = `${HOSTAPI}/categories`;
+      this.http.get(url).then((categories: any) => {
+        // this.categories = categories;
+        if (ret) {
+          return categories;
+        }
+        this.ngRedux.dispatch({type: CHANGE_CATEGORIES, categories});
+      });
     });
   }
 

@@ -3,7 +3,7 @@ import {NgRedux} from '@angular-redux/store';
 import {ForageService} from './storage.service';
 import {IAppState} from '../interfaces/appState.interface';
 import {
-  CHANGE_LESSONS, REMOVE_LESSONS, UPDATE_LESSONS,
+  CHANGE_LESSONS, CHANGE_PRESENT_CATEGORY, CHANGE_PRESENT_SUBJECT, CHANGE_PRESENT_TOPIC, REMOVE_LESSONS, UPDATE_LESSONS,
 } from '../store/actions';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpService} from './http.service';
@@ -29,8 +29,11 @@ export class LessonService {
     this.storage.localGet('token').then((token: any) => {
       this.http.setHeaders({token});
       const url = `${HOSTAPI}/topics/${id}/lessons`;
-      this.http.get(url).then((lessons: any) => {
-        this.ngRedux.dispatch({type: CHANGE_LESSONS, lessons: lessons.lessons});
+      this.http.get(url).then((data: any) => {
+        this.ngRedux.dispatch({type: CHANGE_LESSONS, lessons: data.lessons});
+        this.ngRedux.dispatch({type: CHANGE_PRESENT_TOPIC, activeTopic: data.topic});
+        this.ngRedux.dispatch({type: CHANGE_PRESENT_SUBJECT, activeSubject: data.subject});
+        this.ngRedux.dispatch({type: CHANGE_PRESENT_CATEGORY, activeCategory: data.subject.category});
       });
     });
   }

@@ -30,6 +30,7 @@ import { LessonComponent } from '../../components/pages/lesson.component';
 import { ConversationComponent } from '../../components/pages/conversation.component';
 import {FileUploadModule} from 'ng2-file-upload';
 import {CKEditorModule} from '@ckeditor/ckeditor5-angular';
+import {RouteLinkComponent} from '../../components/components/route-link.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import {CKEditorModule} from '@ckeditor/ckeditor5-angular';
     TopicComponent,
     LessonComponent,
     ConversationComponent,
+    RouteLinkComponent
   ],
   imports: [
     BrowserModule,

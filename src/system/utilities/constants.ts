@@ -1,3 +1,5 @@
+import {environment} from '../../environments/environment';
+
 export const REGEX = {
   EMAIL: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
   PHONE: /^0\d{10}$/
@@ -20,4 +22,4 @@ export const ROUTES = {
   CATEGORIES: '/admin/categories'
 };
 
-export const HOSTAPI = '/api';
+export const HOSTAPI = environment.HOSTAPI;

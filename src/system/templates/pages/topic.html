@@ -4,6 +4,9 @@
   <!-- categories header -->
   <pl-header [data]="headerData"></pl-header>
 
+  <!-- Route Link -->
+  <pl-route-link [showSubject]="true" [page]="'topic'"></pl-route-link>
+
   <!--Topic List -->
   <ul class="topics list-group">
     <li class="topic bg-light p-3 list-group-item d-flex justify-content-between" *ngFor="let topic of topics"
