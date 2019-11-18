@@ -30,6 +30,7 @@ export class PopUpComponent implements OnInit, OnDestroy {
   categories;
   faPlus = faPlus;
   optionsControl: FormControl;
+  imageError = '';
   file;
   id;
   type;
@@ -59,6 +60,7 @@ export class PopUpComponent implements OnInit, OnDestroy {
     color: 'white',
     type: 2
   };
+  imgUrl;
 
   constructor(private fb: FormBuilder,
               private activeModal: NgbActiveModal,
@@ -87,6 +89,7 @@ export class PopUpComponent implements OnInit, OnDestroy {
     };
     this.$popupContent$ = this.popupContent$.subscribe(async (data) => {
       this.popupContent = data;
+      this.imgUrl = this.popupContent.content.imageUrl;
       this.popupContent.content._id ?
         this.query.setValue(this.popupContent.content.title ||
           this.popupContent.content.message ||
@@ -111,6 +114,12 @@ export class PopUpComponent implements OnInit, OnDestroy {
           });
         }
       }
+      if (this.popupContent.title.split(' ')[1] === 'Subject' ||
+        this.popupContent.title.split(' ')[1] === 'Topic' ||
+        this.popupContent.title.split(' ')[1] === 'Lesson') {
+          const image = this.fb.control('');
+          this.queryForm.addControl('image', image);
+    }
       if (this.popupContent.title.split(' ')[1] === 'Question') {
         this.query.setValue('hi'); // to make query field valid
         const question = this.fb.group({
@@ -212,6 +221,9 @@ export class PopUpComponent implements OnInit, OnDestroy {
   get recommended() {
     return this.queryForm.get('recommended');
   }
+  get image() {
+      return this.queryForm.get('image');
+  }
 
 
   closeModal() {
@@ -254,6 +266,24 @@ export class PopUpComponent implements OnInit, OnDestroy {
     messageContent.patchValue(this.editorData);
   }
 
+  imageUpload(event) {
+      this.imageError = '';
+      const acceptedImageTypes = ['png', 'jpg', 'jpeg'];
+      const uploadedFile = event.target.files[0];
+      const uploadedFileType = uploadedFile.type.split('/')[1];
+      if (acceptedImageTypes.indexOf(uploadedFileType) === -1) {
+          this.imageError = 'The uploaded file type is not accepted';
+      } else if (uploadedFile.size > 102400) {
+          this.imageError = 'Max file size should be 100kb';
+      } else {
+          const reader = new FileReader();
+          reader.readAsDataURL(uploadedFile);
+          reader.onload = (event) => {
+              this.imgUrl = reader.result;
+              this.file = uploadedFile;
+          };
+      }
+  }
 
   action() {
     this.showLoader = true;
@@ -276,22 +306,20 @@ export class PopUpComponent implements OnInit, OnDestroy {
         });
         break;
       case 'Add Subject':
-        const subjectData = {
-          title: this.query.value,
-          featured: this.featured.value,
-          recommended: this.recommended.value
-        };
+        const subjectData = new FormData();
+        subjectData.append('image', this.file);
+        subjectData.append('title', this.query.value);
         this.subject.addSubject(subjectData, id).then(() => {
           this.closeModal();
         });
         break;
       case 'Edit Subject':
-        const editSubjectData = {
-          title: this.query.value,
-          featured: this.featured.value,
-          recommended: this.recommended.value,
-          category: this.options.value
-        };
+        const editSubjectData = new FormData();
+        editSubjectData.append('image', this.file);
+        editSubjectData.append('title', this.query.value);
+        editSubjectData.append('featured', this.featured.value);
+        editSubjectData.append('recommended', this.recommended.value);
+        editSubjectData.append('category', this.options.value);
         this.subject.editSubject(editSubjectData, this.popupContent.content._id).then(() => {
           this.closeModal();
         });

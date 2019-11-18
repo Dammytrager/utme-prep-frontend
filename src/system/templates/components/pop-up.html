@@ -231,6 +231,37 @@
           </div>
       </div>
 
+      <!-- coursepack, topic and lesson image -->
+      <div *ngIf="
+           (popupContent.title.split(' ')[1] === 'Subject') ||
+           (popupContent.title.split(' ')[1] === 'Topic') ||
+           (popupContent.title.split(' ')[1] === 'Lesson')">
+          <div class="mb-3 font-weight-bold">Image
+                <span class="small font-weight-light text-muted">
+                (accepted image type are .jpg, .jpeg and .png)
+            </span>
+            </div>
+          <hr>
+          <div class="mb-3 d-flex justify-content-center">
+                <div class="upload-container">
+                    <div>
+                        <input class="form-control d-none" type="file"
+                               (change)="imageUpload($event)" #Image formControlName="image">
+                    </div>
+                    <div class="error small text-danger font-weight-bold mb-1" *ngIf="imageError">{{imageError}}</div>
+                    <div *ngIf="imgUrl; else uploadBlock">
+                        <img [src]="imgUrl" width="250" class="cursor-pointer" (click)="Image.click()" title="Change image">
+                    </div>
+                    <ng-template #uploadBlock>
+                        <div class="text-center cursor-pointer image-upload d-flex justify-content-center align-items-center"
+                             (click)="Image.click()" title="Upload image">
+                            <fa-icon [icon]="faPlus" [size]="'3x'"></fa-icon>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+      </div>
+
       <!--Add more formcontrol -->
       <div class="my-3 d-flex justify-content-end" *ngIf="(popupContent.title === 'Add Question')">
         <button class="btn btn-light" (click)="addControl(type)">
