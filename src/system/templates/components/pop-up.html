@@ -36,6 +36,46 @@
         </div>
       </div>
 
+        <!-- Subject Author, Duration and Other Details -->
+      <div *ngIf="(popupContent.title.split(' ')[1] === 'Subject')">
+        <!-- Author -->
+          <div class="form-group">
+              <input type="text" class="form-control" placeholder="Author" formControlName="author">
+              <!-- errors -->
+              <div *ngIf="author?.errors && author?.touched">
+                  <small *ngIf="author?.errors.required" class="text-red">
+                      This field is required
+                  </small>
+              </div>
+          </div>
+
+        <!-- Other Details -->
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Other Details" formControlName="otherDetails">
+          <!-- errors -->
+          <div *ngIf="otherDetails?.errors && otherDetails?.touched">
+            <small *ngIf="otherDetails?.errors.required" class="text-red">
+              Other Details is required
+            </small>
+          </div>
+        </div>
+
+        <!-- Duration -->
+          <div class="input-group">
+              <input type="number" class="form-control" min="0" placeholder="Duration" formControlName="duration">
+              <div class="input-group-prepend">
+                  <span class="input-group-text">Hours</span>
+              </div>
+          </div>
+          <!-- errors -->
+          <div *ngIf="duration?.errors && duration?.touched">
+              <small *ngIf="duration?.errors.required" class="text-red">
+                  This field is required
+              </small>
+          </div>
+
+      </div>
+
       <!-- Recommended and featured settings for subjects -->
       <div class="my-4" *ngIf="popupContent.title === 'Edit Subject' && !popupContent.content.draft">
         <div class="form-check mb-2">
@@ -231,11 +271,8 @@
           </div>
       </div>
 
-      <!-- coursepack, topic and lesson image -->
-      <div *ngIf="
-           (popupContent.title.split(' ')[1] === 'Subject') ||
-           (popupContent.title.split(' ')[1] === 'Topic') ||
-           (popupContent.title.split(' ')[1] === 'Lesson')">
+      <!-- coursepack image, Author and Duration-->
+      <div *ngIf="(popupContent.title.split(' ')[1] === 'Subject')">
           <div class="mb-3 font-weight-bold">Image
                 <span class="small font-weight-light text-muted">
                 (accepted image type are .jpg, .jpeg and .png)

@@ -99,13 +99,22 @@ export class PopUpComponent implements OnInit, OnDestroy {
       if (this.popupContent.title.split(' ')[1] === 'Subject') {
         const featured = this.fb.control(false);
         const recommended = this.fb.control(false);
+        const author = this.fb.control('', [Validators.required]);
+        const duration = this.fb.control('', [Validators.required]);
+        const otherDetails = this.fb.control('', []);
         this.queryForm.addControl('featured', featured);
         this.queryForm.addControl('recommended', recommended);
+        this.queryForm.addControl('author', author);
+        this.queryForm.addControl('duration', duration);
+        this.queryForm.addControl('otherDetails', otherDetails);
 
         if (this.popupContent.title === 'Edit Subject') {
           this.queryForm.addControl('options', this.optionsControl);
           this.featured.setValue(this.popupContent.content.featured);
           this.recommended.setValue(this.popupContent.content.recommended);
+          this.author.setValue(this.popupContent.content.author);
+          this.duration.setValue(this.popupContent.content.duration);
+          this.otherDetails.setValue(this.popupContent.content.otherDetails);
           const url = `${HOSTAPI}/categories`;
           this.http.get(url).then((categories: any) => {
             this.categories = categories;
@@ -221,6 +230,15 @@ export class PopUpComponent implements OnInit, OnDestroy {
   get recommended() {
     return this.queryForm.get('recommended');
   }
+  get author() {
+    return this.queryForm.get('author');
+  }
+  get duration() {
+    return this.queryForm.get('duration');
+  }
+  get otherDetails() {
+    return this.queryForm.get('otherDetails');
+  }
   get image() {
       return this.queryForm.get('image');
   }
@@ -309,6 +327,9 @@ export class PopUpComponent implements OnInit, OnDestroy {
         const subjectData = new FormData();
         subjectData.append('image', this.file);
         subjectData.append('title', this.query.value);
+        subjectData.append('author', this.author.value);
+        subjectData.append('duration', this.duration.value);
+        subjectData.append('otherDetails', this.otherDetails.value);
         this.subject.addSubject(subjectData, id).then(() => {
           this.closeModal();
         });
@@ -320,6 +341,9 @@ export class PopUpComponent implements OnInit, OnDestroy {
         editSubjectData.append('featured', this.featured.value);
         editSubjectData.append('recommended', this.recommended.value);
         editSubjectData.append('category', this.options.value);
+        editSubjectData.append('author', this.author.value);
+        editSubjectData.append('duration', this.duration.value);
+        editSubjectData.append('otherDetails', this.otherDetails.value);
         this.subject.editSubject(editSubjectData, this.popupContent.content._id).then(() => {
           this.closeModal();
         });
