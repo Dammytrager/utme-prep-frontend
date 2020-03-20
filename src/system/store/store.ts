@@ -8,17 +8,17 @@ import {
   CHANGE_POPUP_CONTENT, CHANGE_PRESENT_CATEGORY, CHANGE_PRESENT_LESSON, CHANGE_PRESENT_SUBJECT, CHANGE_PRESENT_TOPIC,
   CHANGE_ROUTE,
   CHANGE_SUBJECTS,
-  CHANGE_TOPICS,
+  CHANGE_TOPICS, CHANGE_USERS,
   REMOVE_CATEGORIES,
   REMOVE_CONVERSATIONS,
   REMOVE_LESSONS,
   REMOVE_SUBJECTS,
-  REMOVE_TOPICS,
+  REMOVE_TOPICS, REMOVE_USERS,
   UPDATE_CATEGORIES,
   UPDATE_CONVERSATIONS,
   UPDATE_LESSONS,
   UPDATE_SUBJECTS,
-  UPDATE_TOPICS
+  UPDATE_TOPICS, UPDATE_USERS
 } from './actions';
 import {removeItem, updateArray} from '../utilities/functions';
 
@@ -39,7 +39,8 @@ export const INITIAL_STATE: IAppState = {
   subjects: [],
   topics: [],
   lessons: [],
-  conversations: []
+  conversations: [],
+  users: []
 };
 
 export function reducerApp(state, action) {
@@ -131,6 +132,18 @@ export function reducerApp(state, action) {
     case CHANGE_PRESENT_LESSON:
       return Object.assign({}, state, {
         activeLesson: action.activeLesson
+      });
+    case CHANGE_USERS:
+      return Object.assign({}, state, {
+        users: action.users
+      });
+    case UPDATE_USERS:
+      return Object.assign({}, state, {
+        users: updateArray(state.users, action.users)
+      });
+    case REMOVE_USERS:
+      return Object.assign({}, state, {
+        conversations: removeItem(state.users, action.user)
       });
   }
   return state;

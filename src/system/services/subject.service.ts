@@ -28,6 +28,16 @@ export class SubjectService {
 
   }
 
+  async getAllSubjects(cb?) {
+    this.storage.localGet('token').then((token: any) => {
+      this.http.setHeaders({token});
+      const url = `${HOSTAPI}/subjects`;
+      this.http.get(url).then((data: any) => {
+        return data;
+      });
+    });
+  }
+
   async getSubjects(id, cb?) {
     this.storage.localGet('token').then((token: any) => {
       this.http.setHeaders({token});

@@ -4,7 +4,7 @@
     <span class="cursor-pointer"
           [routerLink]="'/admin/categories/' + (activeCategory | async)?._id + '/subjects'">
         <span class="text-black-50"> > </span>
-        <span class="item" [class.text-muted]="page === 'subject'">{{(activeCategory | async)?.title}}</span>
+        <span class="item" [class.text-muted]="page === 'subject'">{{(activeCategory | async)?.title || 'Users'}}</span>
     </span>
     <span class="cursor-pointer"
           *ngIf="showSubject"

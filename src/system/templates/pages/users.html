@@ -1,0 +1,41 @@
+<pl-navbar></pl-navbar>
+<div class="pl-topics container">
+    <ngx-loading-bar color="yellow" includeSpinner="false" height="3px" diameter="0px"></ngx-loading-bar>
+    <!-- categories header -->
+    <pl-header [data]="{
+        title: 'Users',
+        button: 'Add User',
+        popupContent: {
+            title: 'Add User',
+            button: 'Add',
+            placeholder: 'User',
+            content: ''
+        }
+    }"></pl-header>
+
+    <!-- Route link -->
+    <pl-route-link [page]="'subject'"></pl-route-link>
+
+    <!--Users List -->
+    <ul class="topics list-group">
+        <li class="topic bg-light p-3 list-group-item d-flex justify-content-between"
+            *ngFor="let user of users">
+            <div class="topic-title">
+                <div class="mb-2">{{user.phone}}</div>
+            </div>
+            <!-- dropdown menu-->
+            <div class="dropdown" (click)="user.show = !user.show; $event.stopPropagation()">
+                <button class="btn btn-light option-button"
+                        type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                    <fa-icon [icon]="faEllipsisV"></fa-icon>
+                </button>
+                <div class="dropdown-menu" [class.show]="user.show" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" (click)="editUser(user)">Edit</a>
+                    <a class="dropdown-item" (click)="deleteUser(user)">Delete</a>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>

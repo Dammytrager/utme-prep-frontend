@@ -5,13 +5,14 @@
   </div>
   <div class="modal-body">
     <!-- Adding || Editing -->
-    <form [formGroup]="queryForm" *ngIf="popupContent.title.split(' ')[0] !== 'Delete'; else deleteBlock">
+    <form [formGroup]="queryForm" *ngIf="popupContent?.title.split(' ')[0] !== 'Delete'; else deleteBlock">
       <!-- Query Form Field -->
       <div class="form-group"
            *ngIf="
            !(popupContent.title.split(' ')[1] === 'Question') &&
            !(popupContent.title.split(' ')[1] === 'Image') &&
            !(popupContent.title.split(' ')[1] === 'Message') &&
+           !(popupContent.title.split(' ')[1] === 'User') &&
            !(popupContent.title.split(' ')[1] === 'Video')">
         <input type="text" formControlName="query" class="form-control" [placeholder]="popupContent.placeholder">
         <!--errors-->
@@ -36,7 +37,33 @@
         </div>
       </div>
 
-        <!-- Subject Author, Duration and Other Details -->
+      <!-- User Phone Number and courses -->
+      <div *ngIf="(popupContent.title.split(' ')[1] === 'User')">
+        <!-- Phone Number -->
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Phone Number" formControlName="phoneNumber">
+          <!-- errors -->
+          <div *ngIf="phoneNumber?.errors && phoneNumber?.touched">
+            <small *ngIf="phoneNumber?.errors.required" class="text-red">
+              This field is required
+            </small>
+            <small *ngIf="!phoneNumber?.errors.required && phoneNumber?.errors.patternFail" class="text-red">
+              Enter a Valid Phone Number
+            </small>
+          </div>
+        </div>
+
+        <!-- Courses -->
+        <ejs-multiselect [fields]="localFields" [value]="value" [dataSource]="subjects" [placeholder]="'Courses'" [formControlName]="'courses'"></ejs-multiselect>
+        <!-- errors -->
+        <div *ngIf="courses?.errors && courses?.touched">
+          <small *ngIf="courses?.errors.required" class="text-red">
+            This Field is required
+          </small>
+        </div>
+      </div>
+
+      <!-- Subject Author, Duration and Other Details -->
       <div *ngIf="(popupContent.title.split(' ')[1] === 'Subject')">
         <!-- Author -->
           <div class="form-group">

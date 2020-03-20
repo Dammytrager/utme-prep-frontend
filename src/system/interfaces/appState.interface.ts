@@ -13,5 +13,6 @@ export interface IAppState {
   topics: any[];
   lessons: any[];
   conversations: any[];
+  users: any[];
 }
 

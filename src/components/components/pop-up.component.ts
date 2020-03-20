@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {select} from '@angular-redux/store';
@@ -17,6 +17,9 @@ import {ForageService} from '../../system/services/storage.service';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import {ChangeEvent} from '@ckeditor/ckeditor5-angular';
+import {patternMatch} from '../../system/utilities/validators';
+import * as $ from 'jquery';
+import {UsersService} from '../../system/services/users.service';
 
 @Component({
   selector: 'pl-pop-up',
@@ -27,6 +30,9 @@ export class PopUpComponent implements OnInit, OnDestroy {
   ckeConfig: any;
   $popupContent$: Subscription;
   popupContent: IPopup;
+  value;
+  subjects = [];
+  localFields = { text: 'title', value: '_id' };
   categories;
   faPlus = faPlus;
   optionsControl: FormControl;
@@ -70,6 +76,7 @@ export class PopUpComponent implements OnInit, OnDestroy {
               private topic: TopicService,
               private lesson: LessonService,
               private conversation: ConversationService,
+              private user: UsersService,
               private router: Router,
               private storage: ForageService) {
 
@@ -96,6 +103,28 @@ export class PopUpComponent implements OnInit, OnDestroy {
           this.popupContent.content._id) :
         this.query.setValue(this.popupContent.content);
       this.type = this.popupContent.title.split(' ')[1].toLowerCase();
+
+      if (this.popupContent.title.split(' ')[1] === 'User') {
+        this.query.setValue('hi'); // to make query field valid
+        const phoneNoRegex = /^0[0-9]{10}$/;
+        const phoneNumber = this.fb.control('', [Validators.required, patternMatch(phoneNoRegex)]);
+        const courses = this.fb.control('', [Validators.required]);
+        this.queryForm.addControl('phoneNumber', phoneNumber);
+        this.queryForm.addControl('courses', courses);
+        this.storage.localGet('token').then((token: any) => {
+          this.http.setHeaders({token});
+          const url = `${HOSTAPI}/subjects`;
+          this.http.get(url).then((data: any) => {
+            this.subjects = data;
+            this.localFields = { text: 'title', value: '_id' };
+          });
+        });
+        if (this.popupContent.title === 'Edit User') {
+          this.phoneNumber.setValue(this.popupContent.content.phone);
+          this.courses.setValue(this.popupContent.content.courses);
+        }
+      }
+
       if (this.popupContent.title.split(' ')[1] === 'Subject') {
         const featured = this.fb.control(false);
         const recommended = this.fb.control(false);
@@ -123,12 +152,14 @@ export class PopUpComponent implements OnInit, OnDestroy {
           });
         }
       }
+      // Add Image Input
       if (this.popupContent.title.split(' ')[1] === 'Subject' ||
         this.popupContent.title.split(' ')[1] === 'Topic' ||
         this.popupContent.title.split(' ')[1] === 'Lesson') {
           const image = this.fb.control('');
           this.queryForm.addControl('image', image);
     }
+      // Add Questions control
       if (this.popupContent.title.split(' ')[1] === 'Question') {
         this.query.setValue('hi'); // to make query field valid
         const question = this.fb.group({
@@ -243,6 +274,13 @@ export class PopUpComponent implements OnInit, OnDestroy {
       return this.queryForm.get('image');
   }
 
+  get phoneNumber() {
+    return this.queryForm.get('phoneNumber');
+  }
+
+  get courses() {
+    return this.queryForm.get('courses');
+  }
 
   closeModal() {
     this.activeModal.close();
@@ -414,6 +452,29 @@ export class PopUpComponent implements OnInit, OnDestroy {
           this.closeModal();
         });
         break;
+      case 'Add User':
+        const data = {
+          phone: this.phoneNumber.value,
+          courses: this.courses.value
+        };
+        this.user.addUser(data).then(() => {
+          this.closeModal();
+        });
+        break;
+      case 'Edit User':
+          const editdata = {
+            phone: this.phoneNumber.value,
+            courses: this.courses.value
+          };
+          this.user.editUser(this.popupContent.content._id, editdata).then(() => {
+            this.closeModal();
+          });
+          break;
+      case 'Delete User':
+          this.user.deleteUser(this.popupContent.content._id).then(() => {
+            this.closeModal();
+          });
+          break;
       case 'Add Message':
         const messageArr = [];
         let messages = this.message.value.content.split('</p>');

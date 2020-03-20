@@ -31,6 +31,8 @@ import { ConversationComponent } from '../../components/pages/conversation.compo
 import {FileUploadModule} from 'ng2-file-upload';
 import {CKEditorModule} from '@ckeditor/ckeditor5-angular';
 import {RouteLinkComponent} from '../../components/components/route-link.component';
+import {UsersComponent} from '../../components/pages/users.component';
+import {MultiSelectAllModule, MultiSelectModule} from '@syncfusion/ej2-angular-dropdowns';
 
 @NgModule({
   declarations: [
@@ -46,7 +48,8 @@ import {RouteLinkComponent} from '../../components/components/route-link.compone
     TopicComponent,
     LessonComponent,
     ConversationComponent,
-    RouteLinkComponent
+    RouteLinkComponent,
+    UsersComponent
   ],
   imports: [
     BrowserModule,
@@ -60,7 +63,9 @@ import {RouteLinkComponent} from '../../components/components/route-link.compone
     LoadingBarHttpClientModule,
     FontAwesomeModule,
     FileUploadModule,
-    CKEditorModule
+    CKEditorModule,
+    MultiSelectAllModule,
+    MultiSelectModule
   ],
   providers: [
     ToastrService,
