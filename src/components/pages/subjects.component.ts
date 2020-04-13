@@ -9,6 +9,7 @@ import {CHANGE_POPUP_CONTENT} from '../../system/store/actions';
 import {PopUpComponent} from '../components/pop-up.component';
 import {ModalService} from '../../system/services/modals.service';
 import {IAppState} from '../../system/interfaces/appState.interface';
+import {AddUsersComponent} from '../components/add-users.component';
 
 @Component({
   selector: 'pl-subjects',
@@ -58,7 +59,18 @@ export class SubjectsComponent implements OnInit, OnDestroy {
       content: subject
     };
     this.ngRedux.dispatch({type: CHANGE_POPUP_CONTENT, popupContent});
-    this.modal.openModal(PopUpComponent, {size: 'md', centered: true});
+    this.modal.openModal(PopUpComponent, {size: 'lg', centered: true});
+  }
+
+  addUsers(subject) {
+    const popupContent = {
+      title: 'Add Users',
+      button: 'Add',
+      placeholder: 'Users',
+      content: subject
+    };
+    this.ngRedux.dispatch({type: CHANGE_POPUP_CONTENT, popupContent});
+    this.modal.openModal(AddUsersComponent, {size: 'lg', centered: true});
   }
 
   deleteSubject(subject) {
@@ -69,7 +81,7 @@ export class SubjectsComponent implements OnInit, OnDestroy {
       content: subject
     };
     this.ngRedux.dispatch({type: CHANGE_POPUP_CONTENT, popupContent});
-    this.modal.openModal(PopUpComponent, {size: 'md', centered: true});
+    this.modal.openModal(AddUsersComponent, {size: 'md', centered: true});
   }
 
   topics(subject) {

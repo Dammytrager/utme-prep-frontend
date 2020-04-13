@@ -33,6 +33,7 @@ import {CKEditorModule} from '@ckeditor/ckeditor5-angular';
 import {RouteLinkComponent} from '../../components/components/route-link.component';
 import {UsersComponent} from '../../components/pages/users.component';
 import {MultiSelectAllModule, MultiSelectModule} from '@syncfusion/ej2-angular-dropdowns';
+import {AddUsersComponent} from '../../components/components/add-users.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import {MultiSelectAllModule, MultiSelectModule} from '@syncfusion/ej2-angular-d
     LessonComponent,
     ConversationComponent,
     RouteLinkComponent,
-    UsersComponent
+    UsersComponent,
+    AddUsersComponent
   ],
   imports: [
     BrowserModule,
@@ -75,7 +77,8 @@ import {MultiSelectAllModule, MultiSelectModule} from '@syncfusion/ej2-angular-d
     LoginGuard
   ],
   entryComponents: [
-    PopUpComponent
+    PopUpComponent,
+    AddUsersComponent
   ],
   bootstrap: [PlComponent]
 })

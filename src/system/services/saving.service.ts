@@ -2,11 +2,6 @@ import {Injectable} from '@angular/core';
 import {NgRedux} from '@angular-redux/store';
 import {ForageService} from './storage.service';
 import {IAppState} from '../interfaces/appState.interface';
-import {
-  CHANGE_SUBJECTS,
-  REMOVE_SUBJECTS,
-  UPDATE_SUBJECTS
-} from '../store/actions';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpService} from './http.service';
 import {ToastrService} from 'ngx-toastr';

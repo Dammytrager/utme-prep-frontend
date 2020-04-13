@@ -1,0 +1,35 @@
+<div class="pl-add-users">
+    <div class="modal-header">
+        Add Users
+        <a class="close cursor-pointer" (click)="closeModal()">&times;</a>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="usersForm">
+            <div class="form-group">
+                <label for="users">Users Phone Number (Each number takes a new line)</label>
+                <textarea rows="7" class="form-control"
+                          id="users" placeholder="Enter users"
+                          formControlName="users"
+                          [class.is-invalid]="users?.errors && users?.touched">
+                </textarea>
+                <!-- errors -->
+                <div *ngIf="users?.errors && users?.touched">
+                    <small *ngIf="users?.errors.required" class="text-red">
+                        This field is required
+                    </small>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-blue btn-block" [disabled]="usersForm.invalid || showLoader"
+                [class.disabled]="usersForm.invalid || showLoader"
+                (click)="addUsers()">
+            {{popupContent.button}}
+            <div class="float-right" *ngIf="showLoader">
+                <pl-loader [data]="loaderData"></pl-loader>
+            </div>
+        </button>
+    </div>
+</div>

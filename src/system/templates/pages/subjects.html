@@ -26,6 +26,7 @@
             </button>
             <div class="dropdown-menu dropdown-menu-right" [class.show]="subject.show" aria-labelledby="dropdownMenuButton">
               <a class="dropdown-item" (click)="editSubject(subject)">Edit</a>
+              <a class="dropdown-item" (click)="addUsers(subject)">Add Users</a>
               <a class="dropdown-item" (click)="deleteSubject(subject)">Delete</a>
             </div>
           </div>

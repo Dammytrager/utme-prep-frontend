@@ -80,6 +80,18 @@ export class SubjectService {
       return this.ngRedux.dispatch({type: REMOVE_SUBJECTS, subject});
     });
   }
+
+  async getUsers(id) {
+    return this.http.get(`${HOSTAPI}/subject/${id}/users`);
+  }
+
+  async addUsers(id, data) {
+    await this.http.put(`${HOSTAPI}/edit-subject/${id}/add-users`, data).then((data) => {
+      return this.toast.success('User Added successfully');
+    }).catch((err) => {
+      return this.toast.error(err.error.message);
+    });
+  }
 }
 
 
