@@ -128,11 +128,13 @@ export class PopUpComponent implements OnInit, OnDestroy {
       if (this.popupContent.title.split(' ')[1] === 'Subject') {
         const featured = this.fb.control(false);
         const recommended = this.fb.control(false);
+        const disabled = this.fb.control(false);
         const author = this.fb.control('', [Validators.required]);
         const duration = this.fb.control('', [Validators.required]);
         const otherDetails = this.fb.control('', []);
         this.queryForm.addControl('featured', featured);
         this.queryForm.addControl('recommended', recommended);
+        this.queryForm.addControl('disabled', disabled);
         this.queryForm.addControl('author', author);
         this.queryForm.addControl('duration', duration);
         this.queryForm.addControl('otherDetails', otherDetails);
@@ -141,6 +143,7 @@ export class PopUpComponent implements OnInit, OnDestroy {
           this.queryForm.addControl('options', this.optionsControl);
           this.featured.setValue(this.popupContent.content.featured);
           this.recommended.setValue(this.popupContent.content.recommended);
+          this.disabled.setValue(this.popupContent.content.disabled);
           this.author.setValue(this.popupContent.content.author);
           this.duration.setValue(this.popupContent.content.duration);
           this.otherDetails.setValue(this.popupContent.content.otherDetails);
@@ -261,6 +264,9 @@ export class PopUpComponent implements OnInit, OnDestroy {
   get recommended() {
     return this.queryForm.get('recommended');
   }
+  get disabled() {
+    return this.queryForm.get('disabled');
+  }
   get author() {
     return this.queryForm.get('author');
   }
@@ -378,6 +384,7 @@ export class PopUpComponent implements OnInit, OnDestroy {
         editSubjectData.append('title', this.query.value);
         editSubjectData.append('featured', this.featured.value);
         editSubjectData.append('recommended', this.recommended.value);
+        editSubjectData.append('disabled', this.disabled.value);
         editSubjectData.append('category', this.options.value);
         editSubjectData.append('author', this.author.value);
         editSubjectData.append('duration', this.duration.value);
