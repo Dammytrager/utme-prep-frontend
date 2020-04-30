@@ -38,7 +38,7 @@
     "core-js": "^2.5.4",
     "express-formidable": "^1.2.0",
     "firebase": "^5.9.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "localforage": "^1.7.3",
     "magnific-popup": "^1.1.0",
     "ng2-ckeditor": "^1.2.6",
